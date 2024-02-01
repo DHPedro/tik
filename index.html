@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TikTok Video Downloader</title>
+    <style>
+        /* Estilos CSS para a página */
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #videoUrl {
+            width: 80%;
+            padding: 10px;
+        }
+        #downloadButton {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>TikTok DHPedro</h1>
+    <p>Cole o link do vídeo do TikTok abaixo:</p>
+    <input type="text" id="videoUrl" placeholder="Cole o link aqui">
+    <button id="downloadButton">Baixar Vídeo</button>
+
+    <script>
+        // Função para baixar o vídeo
+        document.getElementById('downloadButton').addEventListener('click', async function() {
+            const videoUrl = document.getElementById('videoUrl').value;
+            if (videoUrl) {
+                try {
+                    const response = await fetch('https://api.snaptik.app/v1/download', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            url: videoUrl
+                        })
+                    });
+                    const data = await response.json();
+                    if (data.success) {
+                        // O link direto para o vídeo está em data.video_url
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = data.video_url;
+                        downloadLink.download = 'tiktok_video.mp4';
+                        downloadLink.click();
+                    } else {
+                        alert('Erro ao processar o vídeo. Verifique o link e tente novamente.');
+                    }
+                } catch (error) {
+                    console.error('Erro ao fazer a requisição à API:', error);
+                }
+            } else {
+                alert('Por favor, insira um link válido do TikTok.');
+            }
+        });
+    </script>
+</body>
+</html>
